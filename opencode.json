@@ -129,6 +129,11 @@
       "oauth": {},
       "timeout": 10000
     },
+    "beads": {
+      "type": "local",
+      "command": ["/Users/mohammad/.local/share/uv/tools/beads-mcp/bin/beads-mcp"],
+      "enabled": true
+    },
     "chrome-devtools": {
       "type": "local",
       "command": ["npx", "-y", "chrome-devtools-mcp@latest"]
