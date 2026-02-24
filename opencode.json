@@ -1,8 +1,12 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["opencode-gemini-auth@latest", "opencode-scheduler", "@tarquinen/opencode-dcp@latest"],
-  "model": "openrouter/moonshotai/kimi-k2.5",
-  "small_model": "openrouter/openai/gpt-oss-120b",
+  "plugin": [
+    "opencode-gemini-auth@latest", 
+    "opencode-scheduler", 
+//    "@tarquinen/opencode-dcp@latest",
+  ],
+  "model": "openai/gpt-5.3-codex-spark",
+  "small_model": "cerebras/gpt-oss-120b",
   "formatter": {
     "golangci-lint": {
       "command": ["golangci-lint", "run", "--fix", "$FILE"],
@@ -27,20 +31,32 @@
       ":(){:|:&};:": "deny"
     }
   },
+  "tools": {
+    "atlassian-rovo_*": false,
+    "beads_*": false,
+    "chrome_devtools_*": false,
+    "gitlab_*": false,
+    "google_cloud_*": false,
+    "google_workspace_*": false,
+    "sauron_*": false,
+    "slack_*": false
+  },
   "agent": {
     "build": {
 //      "model": "github-copilot/claude-opus-4.5",
-      "model": "openai/gpt-5.3-codex",
+      "model": "openai/gpt-5.3-codex-spark",
       "temperature": 0.3,
       "prompt": "{file:./prompt/codex.txt}"
     },
-    "plan": {
+    "project-manager": {
 //      "model": "google/gemini-3-pro-preview",
 //      "model": "github-copilot/claude-opus-4.5",
-      "model": "openai/gpt-5.3-codex",
+      "model": "openai/gpt-5.3-codex-spark",
       "temperature": 0.1,
-      "prompt": "{file:./prompt/anthropic.txt}",
+      "prompt": "{file:./prompt/codex.txt}",
       "tools": {
+        "atlassian-rovo_*": true,
+        "beads_*": true,
         "write": false,
         "edit": false,
         "patch": false
@@ -63,7 +79,7 @@
       }
     },
     "explore": {
-      "model": "openrouter/openai/gpt-oss-120b",
+      "model": "cerebras/gpt-oss-120b",
       "temperature": 0.1,
       "prompt": "{file:./prompt/codex.txt}",
       "permission": {
@@ -84,30 +100,17 @@
       },
       "description": "A fast, read-only agent for exploring codebases. Cannot modify files. Use this when you need to quickly find files by patterns, search code for keywords, or answer questions about the codebase."
     },
-    "docs": {
-      "model": "openrouter/openai/gpt-oss-120b",
-      "temperature": 0.3,
+    "sauron": {
+      "model": "openai/gpt-5.3-codex-spark",
       "prompt": "{file:./prompt/codex.txt}",
-      "permission": {
-        "write": {
-          "**/*.md": "allow",
-          "**/*.mdx": "allow",
-          "*": "deny"
-        }
-      },
-      "description": "Documentation writer - generates and updates markdown docs, READMEs, and guides. Can only write to .md/.mdx files."
-    },
-    "test-writer": {
-      "model": "openrouter/anthropic/claude-sonnet-4.5",
-      "temperature": 0.2,
-      "prompt": "{file:./prompt/anthropic.txt}",
-      "permission": {
-        "write": {
-          "**/*_test.go": "allow",
-          "*": "deny"
-        }
-      },
-      "description": "Test specialist - generates comprehensive unit, integration, and e2e tests. Can only write to test files."
+      "description": "Sauron agent - a powerful agent for observebility and troubleshooting tasks.",
+      "tools": {
+        "sauron_*": true,
+        "slack_*": true,
+        "write": false,
+        "edit": false,
+        "patch": false
+      }
     },
     "web-search": {
       "model": "perplexity/sonar-pro",
@@ -125,34 +128,34 @@
     "atlassian-rovo": {
       "type": "remote",
       "url": "https://mcp.atlassian.com/v1/mcp",
-      "enabled": false,
       "oauth": {},
-      "timeout": 10000
+      "timeout": 10000,
+      "enabled": true
     },
     "beads": {
       "type": "local",
       "command": ["/Users/mohammad/.local/share/uv/tools/beads-mcp/bin/beads-mcp"],
-      "enabled": false
+      "enabled": true
     },
-    "chrome-devtools": {
+    "chrome_devtools": {
       "type": "local",
       "command": ["npx", "-y", "chrome-devtools-mcp@latest"],
-      "enabled": false
+      "enabled": true
     },
     "gitlab": {
       "type": "local",
       "command": ["glab", "mcp", "serve"],
-      "enabled": false
+      "enabled": true
     },
-    "google-cloud": {
+    "google_cloud": {
       "type": "local",
       "command": ["npx", "-y", "@google-cloud/gcloud-mcp"],
-      "enabled": false
+      "enabled": true
     },
-    "google-workspace": {
+    "google_workspace": {
       "type": "local",
       "command": ["gemini-workspace-server"],
-      "enabled": false
+      "enabled": true
     },
     "sauron": {
       "type": "local",
